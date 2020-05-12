@@ -11,7 +11,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button"
 
-
 //floating scroll template
 function ElevationScroll(props) {
 
@@ -26,11 +25,16 @@ function ElevationScroll(props) {
      });
    }
 
-
 const useStyles = makeStyles(theme => ({
      toolbarMargin: {    
           ...theme.mixins.toolbar,
           marginBottom: "3em"
+     },
+     logoContainer: {
+          padding: 0,
+          "&:hover": {
+               backgroundColor: "transparent"
+          }
      },
      logo: {
           height: "5em"
@@ -51,16 +55,8 @@ const useStyles = makeStyles(theme => ({
           height: "45px"
      }
 }));
-// const inlineStyles = makeStyles(theme => ({
-//      tab: {
-//           ...theme.typography.tab,
-//           minWidth: 10,
-//           marginLeft: "25px"
-//      }
-// }));
 
 const Header =() => {
-     // const inlineClasses = inlineStyles()
      const classes = useStyles();
      const [value,setValue] = useState(0);
      const handleChange = (e, value) => {
@@ -92,12 +88,18 @@ const Header =() => {
           <React.Fragment>
                <ElevationScroll>
                     <AppBar position="fixed" color="primary">
-                         <ToolBar disableGutters>                        
-                              <img
-                              src={Logo} 
-                              alt="Company Logo"
-                              className={classes.logo}
-                              />
+                         <ToolBar disableGutters>   
+                              <Button 
+                              onClick={() => setValue(0)}
+                              className={classes.logoContainer}
+                              disableRipple //to disable click effect
+                              component={Link} to="/">
+                                   <img
+                                   src={Logo} 
+                                   alt="Company Logo"
+                                   className={classes.logo}
+                                   />
+                              </Button>
                               <Tabs 
                               className={classes.tabContainer} 
                               onChange={handleChange}
