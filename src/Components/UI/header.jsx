@@ -9,7 +9,9 @@ import ToolBar from "@material-ui/core/ToolBar";
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button"
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 //floating scroll template
 function ElevationScroll(props) {
@@ -58,10 +60,30 @@ const useStyles = makeStyles(theme => ({
 
 const Header =() => {
      const classes = useStyles();
+     //tabs state:
      const [value,setValue] = useState(0);
+     
+//menu state:
+     const [anchorEL, setAnchorEL] = useState(null);
+     const [open, setOpen] = useState(false);
+
+
+//methods:
+     //change Tab method:
      const handleChange = (e, value) => {
-          setValue(value)
+          setValue(value);
      };   
+//menu method(s):
+  
+     const handleClick = (event) => {
+          setAnchorEL(event.currentTarget);
+          setOpen(true); 
+     };
+     //closing menu even handler:
+     const handleClose = (event) => {
+          setAnchorEL(null);
+          setOpen(false);
+     };
 
      useEffect(() => {
           if (window.location.pathname === "/" && value !== 0) {
@@ -104,14 +126,33 @@ const Header =() => {
                               className={classes.tabContainer} 
                               onChange={handleChange}
                               value={value}
-                              //indicatorColor specifies color of the active Tab.
                               indicatorColor="secondary"
                               > 
-                                   <Tab className={classes.tab} component={Link} to="/" label="Home"/>
-                                   <Tab className={classes.tab} component={Link} to="/services" label="Services"/>
-                                   <Tab className={classes.tab} component={Link} to="/revolution" label="Revolution"/>
-                                   <Tab className={classes.tab} component={Link} to="/about" label="About Us"/>
-                                   <Tab className={classes.tab} component={Link} to="/contact" label="Contact Us"/>
+                                   <Tab 
+                                        className={classes.tab} 
+                                        component={Link} to="/" 
+                                        label="Home"/>
+                                   <Tab 
+                                        className={classes.tab} 
+                                        component={Link} to="/services" 
+                                        label="Services"
+                                   //menu 
+                                        onMouseOver={event => handleClick(event)}
+                                        aria-owns={anchorEL ? "simple-menu" : undefined}
+                                        aria-haspopup={anchorEL ? "true" : undefined}
+                                        />
+                                   <Tab 
+                                        className={classes.tab} 
+                                        component={Link} to="/revolution" 
+                                        label="Revolution"/>
+                                   <Tab 
+                                        className={classes.tab} 
+                                        component={Link} to="/about" 
+                                        label="About Us"/>
+                                   <Tab 
+                                        className={classes.tab} 
+                                        component={Link} to="/contact" 
+                                        label="Contact Us"/>
                               </Tabs>
                               <Button 
                               variant="contained" 
@@ -119,6 +160,28 @@ const Header =() => {
                               className={classes.button} component={Link} to="estimate">
                                    Free Estimate
                                    </Button>
+
+                              {/*The Menu */}                                   
+                              <Menu
+                              id="simple-menu" 
+                              anchorEl={anchorEL}
+                              open={open}
+                              onClose={handleClose}
+                              MenuListProps={{onMouseLeave: handleClose}}
+                              >
+                                   <MenuItem onClick={() => {handleClose(); setValue(1)}}
+                                   component={Link} to="/services"
+                                   >Services</MenuItem>
+                                   <MenuItem onClick={() => {handleClose(); setValue(1)}}
+                                   component={Link} to="/customsoftware"
+                                   >Custom Software Development</MenuItem>
+                                   <MenuItem onClick={() => {handleClose(); setValue(1)}}
+                                   component={Link} to="/mobileapps"
+                                   >Mobile App Development</MenuItem>
+                                   <MenuItem onClick={() => {handleClose(); setValue(1)}}
+                                   component={Link} to="/websites"
+                                   >Website Development</MenuItem>
+                              </Menu>
                          </ToolBar>
                     </AppBar>
                </ElevationScroll>

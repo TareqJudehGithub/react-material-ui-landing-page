@@ -9,11 +9,11 @@ function App() {
     
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Header />
+        <Header/>
         <Switch> 
           <Route exact path="/" component={() => <div>Home</div>}/>
           <Route exact path="/services" component={() => <div>Services</div>}/>
-          <Route exact path="/customsofware" component={() => <div>Custom Software</div>}/>
+          <Route exact path="/customsoftware" component={() => <div>Custom Software</div>}/>
           <Route exact path="/mobileapps" component={() => <div>Mobile Apps</div>}/>
           <Route exact path="/websites" component={() => <div>Web Sites</div>}/>
           <Route exact path="/revolution" component={() => <div>The Revolution</div>}/>
