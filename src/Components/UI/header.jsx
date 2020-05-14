@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 // import useStyles from "./styles";
 import Logo from "../../assets/logo.svg"
 import {Link} from "react-router-dom";
-
 import { makeStyles } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/ToolBar";
@@ -55,7 +54,28 @@ const useStyles = makeStyles(theme => ({
           marginLeft: "50px",
           marginRight: "25px",
           height: "45px"
+     },
+     menu: {
+          backgroundColor: theme.palette.common.blue,
+          borderRadius: "10px",
+          color: "white",
+          // boxShadow: "1 1px 2px black",
+          // marginTop: "60px"
+     },
+     menuItem : {
+          ...theme.typography.tab,
+          opacity: 0.7,
+          "&:hover": {
+               opacity: 1
+          },
+          // ...theme.typography.menuItem,
      }
+     // menuItemTab: {
+     // "&:hover": {
+     //      backgroundColor: "transparent"
+     // }
+        
+     // }
 }));
 
 const Header =() => {
@@ -66,7 +86,8 @@ const Header =() => {
 //menu state:
      const [anchorEL, setAnchorEL] = useState(null);
      const [open, setOpen] = useState(false);
-
+     //1. menu selection states:
+     const [selectedIndex, setselectedIndex] = useState(0);
 
 //methods:
      //change Tab method:
@@ -84,6 +105,31 @@ const Header =() => {
           setAnchorEL(null);
           setOpen(false);
      };
+     //2. menu selection handler:
+     const menuOptions = [
+          {
+               name: "Services",
+               link: "/services"
+          },
+          {
+               name: "Custom Software Development",
+               link: "/customsoftware"
+          },
+          {
+               name: "Mobile App Development",
+               link: "/mobileapps"
+          },
+          {
+               name: "Website Development",
+               link: "websites"
+          }
+     ]
+     //3. menu selection click handler
+     const handleMenuItemClick = (event, index) => {
+          setAnchorEL(null);
+          setOpen(false);
+          setselectedIndex(index) //index item (menuitem) we clicking
+     }
 
      useEffect(() => {
           if (window.location.pathname === "/" && value !== 0) {
@@ -167,20 +213,53 @@ const Header =() => {
                               anchorEl={anchorEL}
                               open={open}
                               onClose={handleClose}
+                              //to edit menu BG color: 1.
+                              classes={{paper: classes.menu}}
+                              elevation={0}
                               MenuListProps={{onMouseLeave: handleClose}}
                               >
-                                   <MenuItem onClick={() => {handleClose(); setValue(1)}}
+                                   {
+                                        menuOptions.map((option, index) => {
+                                             return(
+                                                  <MenuItem
+                                                  key={option.name}
+                                                  classes={{root: classes.menuItem}}
+                                                  onClick={(event) => {
+                                                       handleMenuItemClick(event,
+                                                       index); 
+                                                       setValue(1); 
+                                                       handleClose()
+                                                  }}
+                                                  component={Link} to={option.link}
+                                                  //applies styling when this menuItem is selected
+                                                  selected={index === selectedIndex && value === 1} 
+                                                  
+                                                  >
+                                                  {option.name}
+                                                  </MenuItem>
+                                             )
+                                        })
+                                   }
+                                   {/* <MenuItem onClick={() => {handleClose(); setValue(1)}}
                                    component={Link} to="/services"
+                                   //to edit menu BG color: 2.
+                                   classes={{root: classes.menuItemTab}}
                                    >Services</MenuItem>
+
                                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
                                    component={Link} to="/customsoftware"
+                                   classes={{root: classes.menuItem}}
                                    >Custom Software Development</MenuItem>
+                                   
                                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
                                    component={Link} to="/mobileapps"
+                                   classes={{root: classes.menuItem}}
                                    >Mobile App Development</MenuItem>
+                                   
                                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
                                    component={Link} to="/websites"
-                                   >Website Development</MenuItem>
+                                   classes={{root: classes.menuItem}}
+                                   >Website Development</MenuItem> */}
                               </Menu>
                          </ToolBar>
                     </AppBar>

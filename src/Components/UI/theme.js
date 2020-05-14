@@ -30,6 +30,9 @@ export default createMuiTheme({
                textTransform: "none",
                color: "white",
                
+          },
+          menuItem: {
+               fontSize: "0.95rem"
           }
      }
 });
