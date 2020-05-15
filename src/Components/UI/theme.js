@@ -33,6 +33,11 @@ export default createMuiTheme({
           },
           menuItem: {
                fontSize: "0.95rem"
-          }
+          },
+          // "&:hover": {
+          //      fontWeight: "bolder",
+          //      color: arcOrange
+          // }
+          
      }
 });

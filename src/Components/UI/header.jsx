@@ -64,30 +64,27 @@ const useStyles = makeStyles(theme => ({
      },
      menuItem : {
           ...theme.typography.tab,
+          ...theme.typography.menuItem,
           opacity: 0.7,
           "&:hover": {
-               opacity: 1
-          },
-          // ...theme.typography.menuItem,
+               opacity: 1,
+               backgroundColor: "transparent"
+
+          }
      }
-     // menuItemTab: {
-     // "&:hover": {
-     //      backgroundColor: "transparent"
-     // }
-        
-     // }
 }));
 
 const Header =() => {
      const classes = useStyles();
-     //tabs state:
-     const [value,setValue] = useState(0);
-     
+
+//tabs state:
+     const [value,setValue] = useState(0);   
 //menu state:
      const [anchorEL, setAnchorEL] = useState(null);
      const [open, setOpen] = useState(false);
      //1. menu selection states:
      const [selectedIndex, setselectedIndex] = useState(0);
+     
 
 //methods:
      //change Tab method:
@@ -128,7 +125,7 @@ const Header =() => {
      const handleMenuItemClick = (event, index) => {
           setAnchorEL(null);
           setOpen(false);
-          setselectedIndex(index) //index item (menuitem) we clicking
+          setselectedIndex(index) //index item (menuitem) we're clicking
      }
 
      useEffect(() => {
@@ -150,7 +147,63 @@ const Header =() => {
           else if (window.location.pathname === "/estimate" && value !== 5) {
                setValue(5)
           }
-                     
+          switch (window.location.pathname) {
+               case "/":
+                    if(value !== 0) {//if the correct page value is not set?
+                         setValue() //then set the correct value for that page.
+                    }
+               break;
+               case "/services":
+                    if(value !==1) {
+                         setValue(1);
+                         setselectedIndex(0)
+                    }
+               break;
+                    case "/customsoftware":
+                         if(value !== 1) {
+                              setValue(1);
+                              setselectedIndex(1)
+                         }
+                    break;
+                    case "/mobileapps":
+                         if(value !== 1) {
+                              setValue(1);
+                              setselectedIndex(2)
+                         }
+                    break;
+                    case "/websites":
+                         if(value !== 1) {
+                              setValue(1)
+                              setselectedIndex(3)
+                         }
+                    break;
+               case "/revolution":
+                    if(value !== 2) {
+                         setValue(2);
+                         setselectedIndex(0)
+                    }
+               break;
+               case "/about":
+                    if(value !== 3) {
+                         setValue(3);
+                         setselectedIndex(0)
+                    }
+               break;
+               case "/contact":
+                    if(value !== 4) {
+                         setValue(4);
+                         setselectedIndex(0)
+                    }
+               break;
+               case "/estimate":
+               if(value !== 5) {
+                    setValue(5);
+                    setselectedIndex(0)
+               }
+               break;
+               default:
+                    break;                        
+          }        
      }, [value]);
      return (
           <React.Fragment>
@@ -222,13 +275,13 @@ const Header =() => {
                                         menuOptions.map((option, index) => {
                                              return(
                                                   <MenuItem
-                                                  key={option.name}
+                                                  key={index}
                                                   classes={{root: classes.menuItem}}
                                                   onClick={(event) => {
                                                        handleMenuItemClick(event,
                                                        index); 
                                                        setValue(1); 
-                                                       handleClose()
+                                                       handleClose();
                                                   }}
                                                   component={Link} to={option.link}
                                                   //applies styling when this menuItem is selected
