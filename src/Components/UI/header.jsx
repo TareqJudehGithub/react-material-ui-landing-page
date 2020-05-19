@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 // import useStyles from "./styles";
+//material-ui/core imports:
 import Logo from "../../assets/logo.svg"
 import {Link} from "react-router-dom";
-import { useScrollTrigger,makeStyles, AppBar, Tabs, Tab, Menu, MenuItem, Button } from "@material-ui/core";
+import { useScrollTrigger,makeStyles, AppBar, Tabs, Tab, Menu, MenuItem, Button, IconButton } from "@material-ui/core";
 import ToolBar from "@material-ui/core/ToolBar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+//material-ui/styles imports:
 import {useTheme} from "@material-ui/core/styles"
+
+//material-ui/icons imports:
+import MenuIcon from "@material-ui/icons/Menu";
+
+
+
 
 //floating scroll template
 function ElevationScroll(props) {
@@ -82,7 +91,26 @@ const useStyles = makeStyles(theme => ({
           "&:hover": {
                opacity: 1,
                backgroundColor: "transparent"
-
+          }
+     },
+     drawerIcon: {
+          [theme.breakpoints.down("md")]: {
+               height: "40px",
+          width: "40px"
+          },
+          [theme.breakpoints.down("sm")]: {
+               height: "30px",
+          width: "30px"
+          },
+          [theme.breakpoints.down("xs")]: {
+               height: "20px",
+          width: "20px"
+          }
+     },
+     drawerIconContainer: {
+          marginLeft: "auto",
+          "&:hover": {
+               backgroundColor: "transparent"
           }
      }
 }));
@@ -93,33 +121,37 @@ const Header =() => {
      const classes = useStyles();
 //access to default themes in our component:
      const theme = useTheme();
+//to test mobile device responsivness:
+const iOS = process.browser && /iPad|iPhone|iPod/
+.test(navigator.userAgent);
 //to select medium and below to return true:
      const matches = useMediaQuery(theme.breakpoints.down("md"))
 
+//drawer state:
+     const [openDrawer, setOpenDrawer] = useState(false);
 //tabs state:
      const [value,setValue] = useState(0);   
 //menu state:
      const [anchorEL, setAnchorEL] = useState(null);
-     const [open, setOpen] = useState(false);
+     const [openMenu, setOpenMenu] = useState(false);
      //1. menu selection states:
      const [selectedIndex, setselectedIndex] = useState(0);
      
-
 //methods:
      //change Tab method:
-     const handleChange = (e, value) => {
-          setValue(value);
+     const handleChange = (e, newValue) => {
+          setValue(newValue);
      };   
 //menu method(s):
   
      const handleClick = (event) => {
           setAnchorEL(event.currentTarget);
-          setOpen(true); 
+          setOpenMenu(true); 
      };
      //closing menu even handler:
      const handleClose = (event) => {
           setAnchorEL(null);
-          setOpen(false);
+          setOpenMenu(false);
      };
      //2. menu selection handler:
      const menuOptions = [
@@ -143,33 +175,33 @@ const Header =() => {
      //3. menu selection click handler
      const handleMenuItemClick = (event, index) => {
           setAnchorEL(null);
-          setOpen(false);
+          setOpenMenu(false);
           setselectedIndex(index) //index item (menuitem) we're clicking
      }
 
      useEffect(() => {
-          if (window.location.pathname === "/" && value !== 0) {
-               setValue(0)
-          }
-          else if (window.location.pathname === "/services" && value !== 1) {
-               setValue(1)
-          }
-          else if (window.location.pathname === "/revolution" && value !== 2) {
-               setValue(2)
-          }
-          else if (window.location.pathname === "/about" && value !== 3) {
-               setValue(3)
-          }
-          else if (window.location.pathname === "/contact" && value !== 4) {
-               setValue(4)
-          }
-          else if (window.location.pathname === "/estimate" && value !== 5) {
-               setValue(5)
-          }
+          // if (window.location.pathname === "/" && value !== 0) {
+          //      setValue(0)
+          // }
+          // else if (window.location.pathname === "/services" && value !== 1) {
+          //      setValue(1)
+          // }
+          // else if (window.location.pathname === "/revolution" && value !== 2) {
+          //      setValue(2)
+          // }
+          // else if (window.location.pathname === "/about" && value !== 3) {
+          //      setValue(3)
+          // }
+          // else if (window.location.pathname === "/contact" && value !== 4) {
+          //      setValue(4)
+          // }
+          // else if (window.location.pathname === "/estimate" && value !== 5) {
+          //      setValue(5)
+          // }
           switch (window.location.pathname) {
                case "/":
                     if(value !== 0) {//if the correct page value is not set?
-                         setValue() //then set the correct value for that page.
+                         setValue(0) //then set the correct value for that page.
                     }
                break;
                case "/services":
@@ -270,7 +302,7 @@ const tabs = (
                <Menu
                id="simple-menu" 
                anchorEl={anchorEL}
-               open={open}
+               open={openMenu}
                onClose={handleClose}
                //1. to edit menu BG color:
                classes={{paper: classes.menu}}
@@ -303,7 +335,8 @@ const tabs = (
                     component={Link} to="/services"
                     //to edit menu BG color: 2.
                     classes={{root: classes.menuItemTab}}
-                    >Services</MenuItem>
+                    >Services
+                    </MenuItem>
 
                     <MenuItem onClick={() => {handleClose(); setValue(1)}}
                     component={Link} to="/customsoftware"
@@ -322,6 +355,26 @@ const tabs = (
                </Menu>
      </React.Fragment>
 )
+const drawer = (
+     <React.Fragment>
+          <SwipeableDrawer 
+               disableBackdropTransition={!iOS} 
+               disableDiscovery={iOS}
+               open={openDrawer}
+               onOpen={() =>setOpenDrawer(true)}
+               onClose={() => setOpenDrawer(false)}
+               >
+                    Example Drawer
+          </SwipeableDrawer>
+          <IconButton
+          className={classes.drawerIconContainer}
+          onClick={() => setOpenDrawer(!openDrawer)}
+          disableRipple
+          >
+               <MenuIcon className={classes.drawerIcon}/>
+          </IconButton>
+     </React.Fragment>
+);
 
      return (
           <React.Fragment>
@@ -344,7 +397,7 @@ const tabs = (
                               {
                               matches
                               ?
-                              null
+                              drawer  //render the Drawer for med size or below.
                               :
                               tabs
                               }
