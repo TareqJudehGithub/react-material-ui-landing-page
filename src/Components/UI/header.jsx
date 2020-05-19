@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 // import useStyles from "./styles";
-//material-ui/core imports:
 import Logo from "../../assets/logo.svg"
 import {Link} from "react-router-dom";
-import { useScrollTrigger,makeStyles, AppBar, Tabs, Tab, Menu, MenuItem, Button, IconButton } from "@material-ui/core";
+//material-ui/core imports:
+import { useScrollTrigger,makeStyles, 
+          AppBar, Tabs, Tab,
+          Menu, MenuItem,
+          Button, IconButton, SwipeableDrawer, 
+          List, ListItem, ListItemText 
+     } from "@material-ui/core";
 import ToolBar from "@material-ui/core/ToolBar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 //material-ui/styles imports:
 import {useTheme} from "@material-ui/core/styles"
 
 //material-ui/icons imports:
 import MenuIcon from "@material-ui/icons/Menu";
-
-
-
 
 //floating scroll template
 function ElevationScroll(props) {
@@ -112,6 +113,17 @@ const useStyles = makeStyles(theme => ({
           "&:hover": {
                backgroundColor: "transparent"
           }
+     },
+     drawer: {
+          backgroundColor: theme.palette.common.blue
+     },
+     drawerItem: {
+          ...theme.typography.tab,
+          color: "white"
+     },
+     drawerItemEstimate: {
+          backgroundColor: theme.palette.common.orange,
+          borderRadius: "25px" 
      }
 }));
 
@@ -143,7 +155,6 @@ const iOS = process.browser && /iPad|iPhone|iPod/
           setValue(newValue);
      };   
 //menu method(s):
-  
      const handleClick = (event) => {
           setAnchorEL(event.currentTarget);
           setOpenMenu(true); 
@@ -358,13 +369,81 @@ const tabs = (
 const drawer = (
      <React.Fragment>
           <SwipeableDrawer 
+          
+               classes={{paper: classes.drawer}} //to override Material-UI basic styling.
                disableBackdropTransition={!iOS} 
                disableDiscovery={iOS}
                open={openDrawer}
                onOpen={() =>setOpenDrawer(true)}
                onClose={() => setOpenDrawer(false)}
+               
                >
-                    Example Drawer
+                    <List disablePadding>
+                         <ListItem
+                         divider button
+                         component={Link} to="/"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              // className={classes.drawerItem} OR
+                              classes={{root: classes.drawerItem}}>
+                                   Home</ListItemText>
+                         </ListItem>
+                         <ListItem
+                         button
+                         component={Link} to="/services"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              classes={{root: classes.drawerItem}}>
+                                   Services</ListItemText>
+                         </ListItem>
+                         <ListItem
+                         button
+                         component={Link} to="/revolution"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              classes={{root: classes.drawerItem}}>
+                                   Revolution</ListItemText>
+                         </ListItem>
+                         <ListItem
+                         button
+                         component={Link} to="/about"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              classes={{root: classes.drawerItem}}>About Us</ListItemText>
+                         </ListItem>
+                         <ListItem
+                         button
+                         component={Link} to="/contact"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              classes={{root: classes.drawerItem}}>
+                                   Contact Us</ListItemText>
+                         </ListItem>
+                         <ListItem
+                         classes={{root: classes.drawerItemEstimate}}
+                         button
+                         component={Link} to="/estimate"
+                         onClick={() => setOpenDrawer(false)}
+                         >
+                              <ListItemText 
+                              disableTypography
+                              classes={{root: [classes.drawerItem, 
+                              classes.drawerItemEstimate] }}
+                              className={classes.drawerItem}
+                              >
+                                   Free Estimate</ListItemText>
+                         </ListItem>
+                    </List>
           </SwipeableDrawer>
           <IconButton
           className={classes.drawerIconContainer}
@@ -372,6 +451,7 @@ const drawer = (
           disableRipple
           >
                <MenuIcon className={classes.drawerIcon}/>
+             
           </IconButton>
      </React.Fragment>
 );
