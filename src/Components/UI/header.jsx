@@ -119,11 +119,17 @@ const useStyles = makeStyles(theme => ({
      },
      drawerItem: {
           ...theme.typography.tab,
-          color: "white"
+          color: "white",
+          opacity: 0.7
      },
      drawerItemEstimate: {
-          backgroundColor: theme.palette.common.orange,
-          borderRadius: "25px" 
+          // backgroundColor: theme.palette.common.orange,
+          borderRadius: "25px",
+          border: "2px solid #FFBA60"
+     },
+     drawerItemSelected: {
+          opacity: 1,
+          color: "#FFBA60"
      }
 }));
 
@@ -379,69 +385,132 @@ const drawer = (
                
                >
                     <List disablePadding>
+
                          <ListItem
-                         divider button
-                         component={Link} to="/"
-                         onClick={() => setOpenDrawer(false)}
-                         >
+                              // divider button 
+                              component={Link} to="/"
+                              onClick={() => 
+                                        {setOpenDrawer(false);
+                                        setValue(0);
+                                   }}
+                              selected={value === 0}>
                               <ListItemText 
-                              disableTypography
-                              // className={classes.drawerItem} OR
-                              classes={{root: classes.drawerItem}}>
-                                   Home</ListItemText>
+                                   disableTypography
+                                   className={
+                                        value === 0
+                                        ?
+                                        [classes.drawerItem, classes.drawerItemSelected]
+                                        :
+                                        classes.drawerItem
+                                   }>
+                                        Home
+                              </ListItemText>
                          </ListItem>
+
                          <ListItem
-                         button
-                         component={Link} to="/services"
-                         onClick={() => setOpenDrawer(false)}
-                         >
-                              <ListItemText 
-                              disableTypography
-                              classes={{root: classes.drawerItem}}>
-                                   Services</ListItemText>
+                              button
+                              component={Link} to="/services"
+                              onClick={() => {
+                                   setOpenDrawer(false);
+                                   setValue(1);
+                              }}
+                              selected={value === 1}>
+                                   <ListItemText 
+                                        disableTypography
+                                        className={
+                                             value === 1
+                                             ?
+                                             [classes.drawerItem, classes.drawerItemSelected]
+                                             :
+                                             classes.drawerItem
+                                        }>
+                                             Services
+                                   </ListItemText>
                          </ListItem>
+
                          <ListItem
-                         button
-                         component={Link} to="/revolution"
-                         onClick={() => setOpenDrawer(false)}
-                         >
+                              button
+                              component={Link} to="/revolution"
+                              onClick={() => {
+                                   setOpenDrawer(false);
+                                   setValue(2)
+                              }}
+                              selected={value === 2}>
                               <ListItemText 
-                              disableTypography
-                              classes={{root: classes.drawerItem}}>
-                                   Revolution</ListItemText>
+                                   disableTypography
+                                   className={
+                                        value === 2
+                                        ?
+                                        [classes.drawerItem, classes.drawerItemSelected]
+                                        :
+                                        classes.drawerItem
+                                   }>
+                                        Revolution
+                              </ListItemText>
                          </ListItem>
+
                          <ListItem
-                         button
-                         component={Link} to="/about"
-                         onClick={() => setOpenDrawer(false)}
-                         >
+                              button
+                              component={Link} to="/about"
+                              onClick={() => 
+                                   {setOpenDrawer(false);
+                                   setValue(3);
+                              }}
+                              selected={value === 3}>
                               <ListItemText 
-                              disableTypography
-                              classes={{root: classes.drawerItem}}>About Us</ListItemText>
+                                   disableTypography
+                                   className={
+                                        value === 3
+                                        ?
+                                        [classes.drawerItem, classes.drawerItemSelected]
+                                        :
+                                        classes.drawerItem
+                                   }>
+                                        About Us
+                              </ListItemText>
                          </ListItem>
+
                          <ListItem
-                         button
-                         component={Link} to="/contact"
-                         onClick={() => setOpenDrawer(false)}
-                         >
+                              button
+                              component={Link} to="/contact"
+                              onClick={() => 
+                                   {setOpenDrawer(false);
+                                   setValue(4);
+                              }}
+                              selected={value === 4}>
                               <ListItemText 
-                              disableTypography
-                              classes={{root: classes.drawerItem}}>
-                                   Contact Us</ListItemText>
+                                   disableTypography
+                                   className={
+                                        value === 4
+                                        ?
+                                        [classes.drawerItem, classes.drawerItemSelected]
+                                        :
+                                        classes.drawerItem
+                                   }>
+                                        Contact Us
+                              </ListItemText>
                          </ListItem>
+
                          <ListItem
-                         classes={{root: classes.drawerItemEstimate}}
-                         button
-                         component={Link} to="/estimate"
-                         onClick={() => setOpenDrawer(false)}
-                         >
+                              classes={{root: classes.drawerItemEstimate}}
+                              button
+                              component={Link} to="/estimate"
+                              onClick={() => {
+                                   setOpenDrawer(false);
+                                   setValue(5)
+                              }}
+                              selected={value === 5}>
                               <ListItemText 
-                              disableTypography
-                              classes={{root: [classes.drawerItem, 
-                              classes.drawerItemEstimate] }}
-                              className={classes.drawerItem}
-                              >
-                                   Free Estimate</ListItemText>
+                                   disableTypography
+                                   className={
+                                        value === 5
+                                        ?
+                                        [classes.drawerItem, classes.drawerItemSelected]
+                                        :
+                                        classes.drawerItem
+                                   }>
+                                   Free Estimate
+                              </ListItemText>
                          </ListItem>
                     </List>
           </SwipeableDrawer>
