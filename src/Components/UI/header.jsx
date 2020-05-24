@@ -32,6 +32,7 @@ function ElevationScroll(props) {
    }
 
 const useStyles = makeStyles(theme => ({
+     
      toolbarMargin: {    
           ...theme.mixins.toolbar,
           marginBottom: "3em",
@@ -143,7 +144,7 @@ const Header =() => {
 const iOS = process.browser && /iPad|iPhone|iPod/
 .test(navigator.userAgent);
 //to select medium and below to return true:
-     const matches = useMediaQuery(theme.breakpoints.down("md"))
+     const matches = useMediaQuery(theme.breakpoints.down("md"));
 
 //drawer state:
      const [openDrawer, setOpenDrawer] = useState(false);
@@ -174,21 +175,38 @@ const iOS = process.browser && /iPad|iPhone|iPod/
      const menuOptions = [
           {
                name: "Services",
-               link: "/services"
+               link: "/services",
+               activeIndex: 1,
+               selectedIndex: 0
           },
           {
                name: "Custom Software Development",
-               link: "/customsoftware"
+               link: "/customsoftware",
+               activeIndex: 1,
+               selectedIndex: 1
           },
           {
                name: "Mobile App Development",
-               link: "/mobileapps"
+               link: "/mobileapps",
+               activeIndex: 1,
+               selectedIndex: 2
           },
           {
                name: "Website Development",
-               link: "websites"
+               link: "websites",
+               activeIndex: 1,
+               selectedIndex: 3
           }
      ]
+
+     const routes = [
+          { name: "Home", link: "/", activeIndex: 0},
+          { name: "Services", link: "/services", activeIndex: 1},
+          { name: "Revolution", link: "/revolution", activeIndex: 2},
+          { name: "About Us", link: "/about", activeIndex: 3},
+          { name: "Contact Us", link: "/contact", activeIndex: 4}
+     ]
+
      //3. menu selection click handler
      const handleMenuItemClick = (event, index) => {
           setAnchorEL(null);
@@ -197,82 +215,83 @@ const iOS = process.browser && /iPad|iPhone|iPod/
      }
 
      useEffect(() => {
-          // if (window.location.pathname === "/" && value !== 0) {
-          //      setValue(0)
-          // }
-          // else if (window.location.pathname === "/services" && value !== 1) {
-          //      setValue(1)
-          // }
-          // else if (window.location.pathname === "/revolution" && value !== 2) {
-          //      setValue(2)
-          // }
-          // else if (window.location.pathname === "/about" && value !== 3) {
-          //      setValue(3)
-          // }
-          // else if (window.location.pathname === "/contact" && value !== 4) {
-          //      setValue(4)
-          // }
-          // else if (window.location.pathname === "/estimate" && value !== 5) {
-          //      setValue(5)
-          // }
-          switch (window.location.pathname) {
-               case "/":
-                    if(value !== 0) {//if the correct page value is not set?
-                         setValue(0) //then set the correct value for that page.
-                    }
-               break;
-               case "/services":
-                    if(value !==1) {
-                         setValue(1);
-                         setselectedIndex(0)
-                    }
-               break;
-                    case "/customsoftware":
-                         if(value !== 1) {
-                              setValue(1);
-                              setselectedIndex(1)
+          //combining menuOptions and routes:
+          [...menuOptions, ...routes].forEach(route => {
+
+               switch(window.location.pathname) {
+                    case `${route.link}`:
+                         //checking teh current value by checking the active tab in routes array.
+                         if(value !== route.activeIndex) { //if the correct page value is not set?
+                              setValue(route.activeIndex) //then set the correct value for that page.
+                              if(route.selectedIndex &&   
+                              //to determine which menuItem is selected:
+                                 route.selectedIndex !== selectedIndex){
+                                      setselectedIndex(route.selectedIndex) //if not, set it correctly.
+                                 }
                          }
-                    break;
-                    case "/mobileapps":
-                         if(value !== 1) {
-                              setValue(1);
-                              setselectedIndex(2)
-                         }
-                    break;
-                    case "/websites":
-                         if(value !== 1) {
-                              setValue(1)
-                              setselectedIndex(3)
-                         }
-                    break;
-               case "/revolution":
-                    if(value !== 2) {
-                         setValue(2);
-                         setselectedIndex(0)
-                    }
-               break;
-               case "/about":
-                    if(value !== 3) {
-                         setValue(3);
-                         setselectedIndex(0)
-                    }
-               break;
-               case "/contact":
-                    if(value !== 4) {
-                         setValue(4);
-                         setselectedIndex(0)
-                    }
-               break;
-               case "/estimate":
-               if(value !== 5) {
-                    setValue(5);
-                    setselectedIndex(0)
-               }
-               break;
-               default:
-                    break;                        
-          }        
-     }, [value]);
+                         break;
+                    default:
+                         break;
+               };            
+          } );
+          // switch (window.location.pathname) {
+          //      case "/":
+          //           if(value !== 0) {//if the correct page value is not set?
+          //                setValue(0) //then set the correct value for that page.
+          //           }
+          //      break;
+          //      case "/services":
+          //           if(value !==1) {
+          //                setValue(1);
+          //                setselectedIndex(0)
+          //           }
+          //      break;
+          //           case "/customsoftware":
+          //                if(value !== 1) {
+          //                     setValue(1);
+          //                     setselectedIndex(1)
+          //                }
+          //           break;
+          //           case "/mobileapps":
+          //                if(value !== 1) {
+          //                     setValue(1);
+          //                     setselectedIndex(2)
+          //                }
+          //           break;
+          //           case "/websites":
+          //                if(value !== 1) {
+          //                     setValue(1)
+          //                     setselectedIndex(3)
+          //                }
+          //           break;
+          //      case "/revolution":
+          //           if(value !== 2) {
+          //                setValue(2);
+          //                setselectedIndex(0)
+          //           }
+          //      break;
+          //      case "/about":
+          //           if(value !== 3) {
+          //                setValue(3);
+          //                setselectedIndex(0)
+          //           }
+          //      break;
+          //      case "/contact":
+          //           if(value !== 4) {
+          //                setValue(4);
+          //                setselectedIndex(0)
+          //           }
+          //      break;
+          //      case "/estimate":
+          //      if(value !== 5) {
+          //           setValue(5);
+          //           setselectedIndex(0)
+          //      }
+          //      break;
+          //      default:
+          //           break;                        
+          // }        
+     }, [value, menuOptions, selectedIndex, routes]);
 
 const tabs = (
      <React.Fragment>
@@ -384,135 +403,135 @@ const drawer = (
                onClose={() => setOpenDrawer(false)}
                
                >
-                    <List disablePadding>
+               <List disablePadding>
 
-                         <ListItem
-                              // divider button 
-                              component={Link} to="/"
-                              onClick={() => 
-                                        {setOpenDrawer(false);
-                                        setValue(0);
-                                   }}
-                              selected={value === 0}>
-                              <ListItemText 
-                                   disableTypography
-                                   className={
-                                        value === 0
-                                        ?
-                                        [classes.drawerItem, classes.drawerItemSelected]
-                                        :
-                                        classes.drawerItem
-                                   }>
-                                        Home
-                              </ListItemText>
-                         </ListItem>
-
-                         <ListItem
-                              button
-                              component={Link} to="/services"
-                              onClick={() => {
-                                   setOpenDrawer(false);
-                                   setValue(1);
-                              }}
-                              selected={value === 1}>
-                                   <ListItemText 
-                                        disableTypography
-                                        className={
-                                             value === 1
-                                             ?
-                                             [classes.drawerItem, classes.drawerItemSelected]
-                                             :
-                                             classes.drawerItem
-                                        }>
-                                             Services
-                                   </ListItemText>
-                         </ListItem>
-
-                         <ListItem
-                              button
-                              component={Link} to="/revolution"
-                              onClick={() => {
-                                   setOpenDrawer(false);
-                                   setValue(2)
-                              }}
-                              selected={value === 2}>
-                              <ListItemText 
-                                   disableTypography
-                                   className={
-                                        value === 2
-                                        ?
-                                        [classes.drawerItem, classes.drawerItemSelected]
-                                        :
-                                        classes.drawerItem
-                                   }>
-                                        Revolution
-                              </ListItemText>
-                         </ListItem>
-
-                         <ListItem
-                              button
-                              component={Link} to="/about"
-                              onClick={() => 
+                    <ListItem
+                         // divider button 
+                         component={Link} to="/"
+                         onClick={() => 
                                    {setOpenDrawer(false);
-                                   setValue(3);
+                                   setValue(0);
                               }}
-                              selected={value === 3}>
-                              <ListItemText 
-                                   disableTypography
-                                   className={
-                                        value === 3
-                                        ?
-                                        [classes.drawerItem, classes.drawerItemSelected]
-                                        :
-                                        classes.drawerItem
-                                   }>
-                                        About Us
-                              </ListItemText>
-                         </ListItem>
+                         selected={value === 0}>
+                         <ListItemText 
+                              disableTypography
+                              className={
+                                   value === 0
+                                   ?
+                                   [classes.drawerItem, classes.drawerItemSelected]
+                                   :
+                                   classes.drawerItem
+                              }>
+                                   Home
+                         </ListItemText>
+                    </ListItem>
 
-                         <ListItem
-                              button
-                              component={Link} to="/contact"
-                              onClick={() => 
-                                   {setOpenDrawer(false);
-                                   setValue(4);
-                              }}
-                              selected={value === 4}>
+                    <ListItem
+                         button
+                         component={Link} to="/services"
+                         onClick={() => {
+                              setOpenDrawer(false);
+                              setValue(1);
+                         }}
+                         selected={value === 1}>
                               <ListItemText 
                                    disableTypography
                                    className={
-                                        value === 4
+                                        value === 1
                                         ?
                                         [classes.drawerItem, classes.drawerItemSelected]
                                         :
                                         classes.drawerItem
                                    }>
-                                        Contact Us
+                                        Services
                               </ListItemText>
-                         </ListItem>
+                    </ListItem>
 
-                         <ListItem
-                              classes={{root: classes.drawerItemEstimate}}
-                              button
-                              component={Link} to="/estimate"
-                              onClick={() => {
-                                   setOpenDrawer(false);
-                                   setValue(5)
-                              }}
-                              selected={value === 5}>
-                              <ListItemText 
-                                   disableTypography
-                                   className={
-                                        value === 5
-                                        ?
-                                        [classes.drawerItem, classes.drawerItemSelected]
-                                        :
-                                        classes.drawerItem
-                                   }>
-                                   Free Estimate
-                              </ListItemText>
-                         </ListItem>
-                    </List>
+                    <ListItem
+                         button
+                         component={Link} to="/revolution"
+                         onClick={() => {
+                              setOpenDrawer(false);
+                              setValue(2)
+                         }}
+                         selected={value === 2}>
+                         <ListItemText 
+                              disableTypography
+                              className={
+                                   value === 2
+                                   ?
+                                   [classes.drawerItem, classes.drawerItemSelected]
+                                   :
+                                   classes.drawerItem
+                              }>
+                                   Revolution
+                         </ListItemText>
+                    </ListItem>
+
+                    <ListItem
+                         button
+                         component={Link} to="/about"
+                         onClick={() => 
+                              {setOpenDrawer(false);
+                              setValue(3);
+                         }}
+                         selected={value === 3}>
+                         <ListItemText 
+                              disableTypography
+                              className={
+                                   value === 3
+                                   ?
+                                   [classes.drawerItem, classes.drawerItemSelected]
+                                   :
+                                   classes.drawerItem
+                              }>
+                                   About Us
+                         </ListItemText>
+                    </ListItem>
+
+                    <ListItem
+                         button
+                         component={Link} to="/contact"
+                         onClick={() => 
+                              {setOpenDrawer(false);
+                              setValue(4);
+                         }}
+                         selected={value === 4}>
+                         <ListItemText 
+                              disableTypography
+                              className={
+                                   value === 4
+                                   ?
+                                   [classes.drawerItem, classes.drawerItemSelected]
+                                   :
+                                   classes.drawerItem
+                              }>
+                                   Contact Us
+                         </ListItemText>
+                    </ListItem>
+
+                    <ListItem
+                         classes={{root: classes.drawerItemEstimate}}
+                         button
+                         component={Link} to="/estimate"
+                         onClick={() => {
+                              setOpenDrawer(false);
+                              setValue(5)
+                         }}
+                         selected={value === 5}>
+                         <ListItemText 
+                              disableTypography
+                              className={
+                                   value === 5
+                                   ?
+                                   [classes.drawerItem, classes.drawerItemSelected]
+                                   :
+                                   classes.drawerItem
+                              }>
+                              Free Estimate
+                         </ListItemText>
+                    </ListItem>
+               </List>
           </SwipeableDrawer>
           <IconButton
           className={classes.drawerIconContainer}
