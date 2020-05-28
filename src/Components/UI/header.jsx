@@ -129,8 +129,15 @@ const useStyles = makeStyles(theme => ({
           border: "2px solid #FFBA60"
      },
      drawerItemSelected: {
-          opacity: 1,
-          color: "#FFBA60"
+          //styles for each list item.
+          "& .MultiListItemText-root":{ 
+               opacity: 1,
+               color: "#FFBA60"
+          }
+         
+     },
+     appbar: {
+          zIndex: theme.zIndex.modal + 1 //which element appears on top of other element. 
      }
 }));
 
@@ -201,7 +208,14 @@ const iOS = process.browser && /iPad|iPhone|iPod/
 
      const routes = [
           { name: "Home", link: "/", activeIndex: 0},
-          { name: "Services", link: "/services", activeIndex: 1},
+          { 
+               name: "Services",
+               link: "/services", 
+               activeIndex: 1,
+               ariaOwns: anchorEL ? "simple-menu" : undefined,
+               ariaPopup: anchorEL ? "true" : undefined,
+               mouseOver: event => handleClick(event)
+          },
           { name: "Revolution", link: "/revolution", activeIndex: 2},
           { name: "About Us", link: "/about", activeIndex: 3},
           { name: "Contact Us", link: "/contact", activeIndex: 4}
@@ -233,64 +247,7 @@ const iOS = process.browser && /iPad|iPhone|iPod/
                     default:
                          break;
                };            
-          } );
-          // switch (window.location.pathname) {
-          //      case "/":
-          //           if(value !== 0) {//if the correct page value is not set?
-          //                setValue(0) //then set the correct value for that page.
-          //           }
-          //      break;
-          //      case "/services":
-          //           if(value !==1) {
-          //                setValue(1);
-          //                setselectedIndex(0)
-          //           }
-          //      break;
-          //           case "/customsoftware":
-          //                if(value !== 1) {
-          //                     setValue(1);
-          //                     setselectedIndex(1)
-          //                }
-          //           break;
-          //           case "/mobileapps":
-          //                if(value !== 1) {
-          //                     setValue(1);
-          //                     setselectedIndex(2)
-          //                }
-          //           break;
-          //           case "/websites":
-          //                if(value !== 1) {
-          //                     setValue(1)
-          //                     setselectedIndex(3)
-          //                }
-          //           break;
-          //      case "/revolution":
-          //           if(value !== 2) {
-          //                setValue(2);
-          //                setselectedIndex(0)
-          //           }
-          //      break;
-          //      case "/about":
-          //           if(value !== 3) {
-          //                setValue(3);
-          //                setselectedIndex(0)
-          //           }
-          //      break;
-          //      case "/contact":
-          //           if(value !== 4) {
-          //                setValue(4);
-          //                setselectedIndex(0)
-          //           }
-          //      break;
-          //      case "/estimate":
-          //      if(value !== 5) {
-          //           setValue(5);
-          //           setselectedIndex(0)
-          //      }
-          //      break;
-          //      default:
-          //           break;                        
-          // }        
+          } );   
      }, [value, menuOptions, selectedIndex, routes]);
 
 const tabs = (
@@ -301,31 +258,22 @@ const tabs = (
                value={value}
                indicatorColor="secondary"
                > 
-                    <Tab 
-                         className={classes.tab} 
-                         component={Link} to="/" 
-                         label="Home"/>
-                    <Tab 
-                         className={classes.tab} 
-                         component={Link} to="/services" 
-                         label="Services"
-                    //menu 
-                         onMouseOver={event => handleClick(event)}
-                         aria-owns={anchorEL ? "simple-menu" : undefined}
-                         aria-haspopup={anchorEL ? "true" : undefined}
-                         />
-                    <Tab 
-                         className={classes.tab} 
-                         component={Link} to="/revolution" 
-                         label="Revolution"/>
-                    <Tab 
-                         className={classes.tab} 
-                         component={Link} to="/about" 
-                         label="About Us"/>
-                    <Tab 
-                         className={classes.tab} 
-                         component={Link} to="/contact" 
-                         label="Contact Us"/>
+                    {
+                         routes.map(route => {
+                              return(
+                                   <Tab 
+                                   key={route.activeIndex}
+                                   className={classes.tab}
+                                   component={Link} to={route.link}
+                                   label={route.name}
+                                   aria-owns={route.ariaOwns}
+                                   aria-haspopup={route.ariaPopup}
+                                   onMouseOver={route.mouseOver}
+                                   />
+                              )
+                         })
+                    }
+                  
                </Tabs>
                <Button 
                variant="contained" 
@@ -336,6 +284,7 @@ const tabs = (
 
                {/*The Menu */}                                   
                <Menu
+               style={{zIndex: 1302}}
                id="simple-menu" 
                anchorEl={anchorEL}
                open={openMenu}
@@ -344,6 +293,7 @@ const tabs = (
                classes={{paper: classes.menu}}
                elevation={0}
                MenuListProps={{onMouseLeave: handleClose}}
+               keepMounted //all menu items are always mounted on the DOM.
                >
                     {
                          menuOptions.map((option, index) => {
@@ -367,34 +317,13 @@ const tabs = (
                               )
                          })
                     }
-                    {/* <MenuItem onClick={() => {handleClose(); setValue(1)}}
-                    component={Link} to="/services"
-                    //to edit menu BG color: 2.
-                    classes={{root: classes.menuItemTab}}
-                    >Services
-                    </MenuItem>
-
-                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
-                    component={Link} to="/customsoftware"
-                    classes={{root: classes.menuItem}}
-                    >Custom Software Development</MenuItem>
-                    
-                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
-                    component={Link} to="/mobileapps"
-                    classes={{root: classes.menuItem}}
-                    >Mobile App Development</MenuItem>
-                    
-                    <MenuItem onClick={() => {handleClose(); setValue(1)}}
-                    component={Link} to="/websites"
-                    classes={{root: classes.menuItem}}
-                    >Website Development</MenuItem> */}
+                  
                </Menu>
      </React.Fragment>
 )
 const drawer = (
      <React.Fragment>
           <SwipeableDrawer 
-          
                classes={{paper: classes.drawer}} //to override Material-UI basic styling.
                disableBackdropTransition={!iOS} 
                disableDiscovery={iOS}
@@ -403,115 +332,40 @@ const drawer = (
                onClose={() => setOpenDrawer(false)}
                
                >
+               <div className={classes.toolbarMargin} />          
                <List disablePadding>
-
-                    <ListItem
-                         // divider button 
-                         component={Link} to="/"
-                         onClick={() => 
-                                   {setOpenDrawer(false);
-                                   setValue(0);
-                              }}
-                         selected={value === 0}>
-                         <ListItemText 
-                              disableTypography
-                              className={
-                                   value === 0
-                                   ?
-                                   [classes.drawerItem, classes.drawerItemSelected]
-                                   :
-                                   classes.drawerItem
-                              }>
-                                   Home
-                         </ListItemText>
-                    </ListItem>
-
-                    <ListItem
-                         button
-                         component={Link} to="/services"
-                         onClick={() => {
-                              setOpenDrawer(false);
-                              setValue(1);
-                         }}
-                         selected={value === 1}>
-                              <ListItemText 
+               {
+                    routes.map(route => {
+                         return (
+                              <ListItem 
+                              key={route.activeIndex}
+                              divider
+                              button
+                              component={Link} to={route.link}
+                              selected={value === route.activeIndex}
+                              classes={{selected: classes.drawerItemSelected,}}
+                              onClick={() => {
+                                   setOpenDrawer(false);
+                                   setValue(route.activeIndex);
+                              }
+                              }
+                              >
+                                   <ListItemText
                                    disableTypography
-                                   className={
-                                        value === 1
-                                        ?
-                                        [classes.drawerItem, classes.drawerItemSelected]
-                                        :
-                                        classes.drawerItem
-                                   }>
-                                        Services
-                              </ListItemText>
-                    </ListItem>
-
+                                   className={classes.drawerItem}            
+                                   >
+                                        {route.name}
+                                   </ListItemText>
+                              </ListItem>
+                         )
+                    })
+               }
+                  
                     <ListItem
-                         button
-                         component={Link} to="/revolution"
-                         onClick={() => {
-                              setOpenDrawer(false);
-                              setValue(2)
+                         classes={{
+                              root: classes.drawerItemEstimate,
+                              selected: classes.drawerItemSelected
                          }}
-                         selected={value === 2}>
-                         <ListItemText 
-                              disableTypography
-                              className={
-                                   value === 2
-                                   ?
-                                   [classes.drawerItem, classes.drawerItemSelected]
-                                   :
-                                   classes.drawerItem
-                              }>
-                                   Revolution
-                         </ListItemText>
-                    </ListItem>
-
-                    <ListItem
-                         button
-                         component={Link} to="/about"
-                         onClick={() => 
-                              {setOpenDrawer(false);
-                              setValue(3);
-                         }}
-                         selected={value === 3}>
-                         <ListItemText 
-                              disableTypography
-                              className={
-                                   value === 3
-                                   ?
-                                   [classes.drawerItem, classes.drawerItemSelected]
-                                   :
-                                   classes.drawerItem
-                              }>
-                                   About Us
-                         </ListItemText>
-                    </ListItem>
-
-                    <ListItem
-                         button
-                         component={Link} to="/contact"
-                         onClick={() => 
-                              {setOpenDrawer(false);
-                              setValue(4);
-                         }}
-                         selected={value === 4}>
-                         <ListItemText 
-                              disableTypography
-                              className={
-                                   value === 4
-                                   ?
-                                   [classes.drawerItem, classes.drawerItemSelected]
-                                   :
-                                   classes.drawerItem
-                              }>
-                                   Contact Us
-                         </ListItemText>
-                    </ListItem>
-
-                    <ListItem
-                         classes={{root: classes.drawerItemEstimate}}
                          button
                          component={Link} to="/estimate"
                          onClick={() => {
@@ -521,13 +375,8 @@ const drawer = (
                          selected={value === 5}>
                          <ListItemText 
                               disableTypography
-                              className={
-                                   value === 5
-                                   ?
-                                   [classes.drawerItem, classes.drawerItemSelected]
-                                   :
-                                   classes.drawerItem
-                              }>
+                              className={classes.drawerItem}
+                         >
                               Free Estimate
                          </ListItemText>
                     </ListItem>
@@ -547,7 +396,11 @@ const drawer = (
      return (
           <React.Fragment>
                <ElevationScroll>
-                    <AppBar position="fixed" color="primary">
+                    <AppBar
+                    className={classes.appbar}
+                    position="fixed" 
+                    color="primary"
+                    >
                          <ToolBar disableGutters>   
                               <Button 
                               onClick={() => setValue(0)}
