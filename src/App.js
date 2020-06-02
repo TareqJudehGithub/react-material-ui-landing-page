@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import Header from "./Components/UI/header";
+import Header from "./Components/UI/header/header";
 import Footer from "./Components/UI/footer/footer";
 import { ThemeProvider } from "@material-ui/core";
 import theme from "./Components/UI/theme";

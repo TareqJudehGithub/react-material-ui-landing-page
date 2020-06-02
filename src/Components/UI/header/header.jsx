@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import useStyles from "./styles";
-import Logo from "../../assets/logo.svg"
+import useStyles from "./header.styles";
+import Logo from "../../../assets/logo.svg"
 import {Link} from "react-router-dom";
 //material-ui/core imports:
-import { useScrollTrigger,makeStyles, 
+import { useScrollTrigger, 
           AppBar, Tabs, Tab,
           Menu, MenuItem,
           Button, IconButton, SwipeableDrawer, 
@@ -31,155 +31,47 @@ function ElevationScroll(props) {
      });
    }
 
-const useStyles = makeStyles(theme => ({
-     
-     toolbarMargin: {    
-          ...theme.mixins.toolbar,
-          marginBottom: "3em",
-          [theme.breakpoints.down("md")]: {
-               marginBottom: "2em"
-          },
-          [theme.breakpoints.down("sm")]: {
-               marginBottom: "1em"
-          },
-          [theme.breakpoints.down("xs")]: {
-               marginBottom: "1em"
-          }
-     },
-     logoContainer: {
-          padding: 0,
-          "&:hover": {
-               backgroundColor: "transparent"
-          }
-     },
-     logo: {
-          height: "6em",
-          [theme.breakpoints.down("md")]: { //responsive logo size for size mid and below:
-               height: "5em"
-          },
-          [theme.breakpoints.down("sm")]: {
-               height: "4em"
-          },
-          [theme.breakpoints.down("xs")]: {
-               height: "3.5em"
-          }
-     },
-     tabContainer: {
-          marginLeft: "auto"
-     },
-     tab: {
-          ...theme.typography.tab,
-          minWidth: 10,
-          marginLeft: "25px"
-     },
-     button: {
-          ...theme.typography.button,
-          borderRadius: "50px",
-          marginLeft: "50px",
-          marginRight: "25px",
-          height: "45px"
-     },
-     menu: {
-          backgroundColor: theme.palette.common.blue,
-          borderRadius: "10px",
-          color: "white",
-          // boxShadow: "1 1px 2px black",
-          // marginTop: "60px"
-     },
-     menuItem : {
-          ...theme.typography.tab,
-          ...theme.typography.menuItem,
-          opacity: 0.7,
-          "&:hover": {
-               opacity: 1,
-               backgroundColor: "transparent"
-          }
-     },
-     drawerIcon: {
-          [theme.breakpoints.down("md")]: {
-               height: "40px",
-          width: "40px"
-          },
-          [theme.breakpoints.down("sm")]: {
-               height: "30px",
-          width: "30px"
-          },
-          [theme.breakpoints.down("xs")]: {
-               height: "20px",
-          width: "20px"
-          }
-     },
-     drawerIconContainer: {
-          marginLeft: "auto",
-          "&:hover": {
-               backgroundColor: "transparent"
-          }
-     },
-     drawer: {
-          backgroundColor: theme.palette.common.blue
-     },
-     drawerItem: {
-          ...theme.typography.tab,
-          color: "white",
-          opacity: 0.7
-     },
-     drawerItemEstimate: {
-          // backgroundColor: theme.palette.common.orange,
-          borderRadius: "25px",
-          border: "2px solid #FFBA60"
-     },
-     drawerItemSelected: {
-          //styles for each list item.
-          "& .MultiListItemText-root":{ 
-               opacity: 1,
-               color: "#FFBA60"
-          }
-         
-     },
-     appbar: {
-          zIndex: theme.zIndex.modal + 1 //which element appears on top of other element. 
-     }
-}));
-
 const Header =() => {
 
-//access to default styles in our component:
      const classes = useStyles();
-//access to default themes in our component:
      const theme = useTheme();
+
 //to test mobile device responsivness:
-const iOS = process.browser && /iPad|iPhone|iPod/
-.test(navigator.userAgent);
-//to select medium and below to return true:
+     const iOS = process.browser && /iPad|iPhone|iPod/
+     .test(navigator.userAgent);
+//MediaQuery for medium and below devices:
      const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-//drawer state:
-     const [openDrawer, setOpenDrawer] = useState(false);
-//tabs state:
-     const [value,setValue] = useState(0);   
-//menu state:
-     const [anchorEL, setAnchorEL] = useState(null);
-     const [openMenu, setOpenMenu] = useState(false);
-     //1. menu selection states:
-     const [selectedIndex, setselectedIndex] = useState(0);
+
+     const [openDrawer, setOpenDrawer] = useState(false); //drawer state
+     const [value,setValue] = useState(0);   //tabs state
+     const [anchorEL, setAnchorEL] = useState(null); //menu state
+     const [openMenu, setOpenMenu] = useState(false);//menu state
+     const [selectedIndex, setselectedIndex] = useState(0); //menu selection states
      
 //methods:
-     //change Tab method:
-     const handleChange = (e, newValue) => {
+     
+     const handleChange = (e, newValue) => { //change Tab method
           setValue(newValue);
      };   
-//menu method(s):
-     const handleClick = (event) => {
+
+     const handleClick = (event) => {        //menu method(s)
           setAnchorEL(event.currentTarget);
           setOpenMenu(true); 
      };
-     //closing menu even handler:
-     const handleClose = (event) => {
+     
+     const handleClose = (event) => {        //closing menu even handler
           setAnchorEL(null);
           setOpenMenu(false);
      };
-     //2. menu selection handler:
-     const menuOptions = [
+     
+     const handleMenuItemClick = (e, index) => { //menu selection handler
+          setAnchorEL(null);
+          setOpenMenu(false);
+          setselectedIndex(index) //index item (menuitem) we're clicking
+     }
+     
+     const menuOptions = [ //menu selection
           {
                name: "Services",
                link: "/services",
@@ -205,8 +97,8 @@ const iOS = process.browser && /iPad|iPhone|iPod/
                selectedIndex: 3
           }
      ]
-
-     const routes = [
+     
+     const routes = [ //tabs routes
           { name: "Home", link: "/", activeIndex: 0},
           { 
                name: "Services",
@@ -220,13 +112,6 @@ const iOS = process.browser && /iPad|iPhone|iPod/
           { name: "About Us", link: "/about", activeIndex: 3},
           { name: "Contact Us", link: "/contact", activeIndex: 4}
      ]
-
-     //3. menu selection click handler
-     const handleMenuItemClick = (event, index) => {
-          setAnchorEL(null);
-          setOpenMenu(false);
-          setselectedIndex(index) //index item (menuitem) we're clicking
-     }
 
      useEffect(() => {
           //combining menuOptions and routes:
@@ -289,7 +174,6 @@ const tabs = (
                anchorEl={anchorEL}
                open={openMenu}
                onClose={handleClose}
-               //1. to edit menu BG color:
                classes={{paper: classes.menu}}
                elevation={0}
                MenuListProps={{onMouseLeave: handleClose}}
@@ -309,8 +193,7 @@ const tabs = (
                                    }}
                                    component={Link} to={option.link}
                                    //applies styling when this menuItem is selected
-                                   selected={index === selectedIndex && value === 1} 
-                                   
+                                   selected={index === selectedIndex && value === 1}                        
                                    >
                                    {option.name}
                                    </MenuItem>
@@ -329,8 +212,7 @@ const drawer = (
                disableDiscovery={iOS}
                open={openDrawer}
                onOpen={() =>setOpenDrawer(true)}
-               onClose={() => setOpenDrawer(false)}
-               
+               onClose={() => setOpenDrawer(false)}   
                >
                <div className={classes.toolbarMargin} />          
                <List disablePadding>
@@ -343,7 +225,7 @@ const drawer = (
                               button
                               component={Link} to={route.link}
                               selected={value === route.activeIndex}
-                              classes={{selected: classes.drawerItemSelected,}}
+                              classes={{selected: classes.drawerItemSelected}}
                               onClick={() => {
                                    setOpenDrawer(false);
                                    setValue(route.activeIndex);
@@ -359,8 +241,7 @@ const drawer = (
                               </ListItem>
                          )
                     })
-               }
-                  
+               }         
                     <ListItem
                          classes={{
                               root: classes.drawerItemEstimate,
@@ -414,14 +295,14 @@ const drawer = (
                                    />
                               </Button>
 
-                              {/* If we are at medium size or smaller ? null : render larger size (1280+)*/}
                               {
                               matches
                               ?
-                              drawer  //render the Drawer for med size or below.
+                              drawer  //render the Drawer for md/sm/xs
                               :
-                              tabs
+                              tabs    //render lg/xl size
                               }
+                              
                          </ToolBar>
                     </AppBar>
                </ElevationScroll>
