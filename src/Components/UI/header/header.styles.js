@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/";
 
 const useStyles = makeStyles(theme => ({
      
@@ -31,15 +31,20 @@ const useStyles = makeStyles(theme => ({
           },
           [theme.breakpoints.down("xs")]: {
                height: "3.5em"
-          }
+          },
+          
      },
      tabContainer: {
-          marginLeft: "auto"
+          marginLeft: "auto",
      },
      tab: {
           ...theme.typography.tab,
           minWidth: 10,
-          marginLeft: "25px"
+          marginLeft: "25px",
+          "&:hover": {
+              textShadow : `0 0 5px ${theme.palette.common.orange}`
+               
+          }
      },
      button: {
           ...theme.typography.button,
@@ -53,7 +58,7 @@ const useStyles = makeStyles(theme => ({
           borderRadius: "10px",
           color: "white",
           // boxShadow: "1 1px 2px black",
-          // marginTop: "60px"
+          marginTop: "60px"
      },
      menuItem : {
           ...theme.typography.tab,

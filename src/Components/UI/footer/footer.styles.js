@@ -35,7 +35,41 @@ const useStyles = makeStyles(theme => ({
      },
      gridItem: {
           margin: "3em"
-     }
+     },
+     icon: {
+          height: "3em",
+          width: "3em",
+          [theme.breakpoints.down("md")]: {
+               height: "2em",
+               width: "2em",
+          },
+          [theme.breakpoints.down("sm")]: {
+               height: "1.5em",
+               width: "1.5em",
+          },
+          [theme.breakpoints.down("xs")]: {
+               height: "1.25em",
+               width: "1.25em",
+          }
+     },
+     socialContainer: {
+          position: "absolute",
+          marginTop: "-6em",
+          right: "1.5em",
+          [theme.breakpoints.down("md")]: {
+               marginTop: "-4em",
+               right: "1.4em"
+          },
+          [theme.breakpoints.down("sm")]: {
+               marginTop: "-3em",
+               right: "1.3em"
+          },
+          [theme.breakpoints.down("xs")]: {
+               marginTop: "-2.5em",
+               right: "1.3em"
+          }
+     },
+
 }))
 
 export default useStyles;

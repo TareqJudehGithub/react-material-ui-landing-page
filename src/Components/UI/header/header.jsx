@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import useStyles from "./header.styles";
-import Logo from "../../../assets/logo.svg"
+import Logo from "../../../assets/logo.svg";
 import {Link} from "react-router-dom";
+
 //material-ui/core imports:
 import { useScrollTrigger, 
           AppBar, Tabs, Tab,
@@ -11,8 +12,9 @@ import { useScrollTrigger,
      } from "@material-ui/core";
 import ToolBar from "@material-ui/core/ToolBar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 //material-ui/styles imports:
-import {useTheme} from "@material-ui/core/styles"
+import {useTheme} from "@material-ui/core/styles";
 
 //material-ui/icons imports:
 import MenuIcon from "@material-ui/icons/Menu";
@@ -31,7 +33,7 @@ function ElevationScroll(props) {
      });
    }
 
-const Header =() => {
+const Header =({ value, setValue, selectedIndex, setselectedIndex }) => {
 
      const classes = useStyles();
      const theme = useTheme();
@@ -42,12 +44,11 @@ const Header =() => {
 //MediaQuery for medium and below devices:
      const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-
      const [openDrawer, setOpenDrawer] = useState(false); //drawer state
-     const [value,setValue] = useState(0);   //tabs state
+    
      const [anchorEL, setAnchorEL] = useState(null); //menu state
      const [openMenu, setOpenMenu] = useState(false);//menu state
-     const [selectedIndex, setselectedIndex] = useState(0); //menu selection states
+     
      
 //methods:
      
@@ -133,7 +134,7 @@ const Header =() => {
                          break;
                };            
           } );   
-     }, [value, menuOptions, selectedIndex, routes]);
+     }, [value, setValue, menuOptions, selectedIndex, setselectedIndex, routes]);
 
 const tabs = (
      <React.Fragment>
@@ -154,6 +155,7 @@ const tabs = (
                                    aria-owns={route.ariaOwns}
                                    aria-haspopup={route.ariaPopup}
                                    onMouseOver={route.mouseOver}
+                                   disableRipple
                                    />
                               )
                          })
@@ -302,7 +304,7 @@ const drawer = (
                               :
                               tabs    //render lg/xl size
                               }
-                              
+
                          </ToolBar>
                     </AppBar>
                </ElevationScroll>
